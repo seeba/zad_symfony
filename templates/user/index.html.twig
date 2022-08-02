@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista użytkowników{% endblock %}
+
+{% block body %}
+    <h1>Lista programistów zarejestrowana w ostatnich {{days}} dniach</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Email</th>
+                <th>Wiek</th>
+                <th>Pełnoletność</th>
+                <th>Dodany z</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+        {% set age = date().diff(date(user.birthDate)).y %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName}}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ age }}</td>
+                <td>{{ user.periodToAdult }}</td>
+                <td>{{ user.fromWhere }}</td>
+                
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">Brak danych</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_new') }}">Utwórz programistę</a>
+{% endblock %}

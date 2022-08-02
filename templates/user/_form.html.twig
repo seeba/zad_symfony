@@ -1,0 +1,72 @@
+{{ form_start(form) }}
+    {{ form_label(form.firstName)}}
+    {{ form_errors(form.firstName)}}
+    {{ form_widget(form.firstName)}}
+    {{ form_label(form.lastName)}}
+    {{ form_errors(form.lastName)}}
+    {{ form_widget(form.lastName)}}
+    {{ form_label(form.password)}}
+    {{ form_errors(form.password)}}
+    {{ form_widget(form.password)}}
+    {{ form_label(form.pesel)}}
+    {{ form_errors(form.pesel)}}
+    {{ form_widget(form.pesel)}}
+    {{ form_label(form.email)}}
+    {{ form_errors(form.email)}}
+    {{ form_widget(form.email)}}
+    {{ form_label(form.programmingLanguages)}}
+    <ul id="language-fields-list"
+        data-prototype="{{ form_widget(form.programmingLanguages.vars.prototype)|e }}" 
+        data-widget-tags="{{ '<li></li>'|e }}"
+        data-widget-counter="{{ form.programmingLanguages|length }}">
+    {% for language in form.programmingLanguages %}
+        <li>{{ form_label(language) }}
+            {{ form_errors(language)}}
+            {{ form_widget(language)}}
+        </li>
+    {% endfor %}
+    </ul>
+    <div class="row">
+        <button type="button"
+            class="add-another-collection-widget btn btn-primary"
+            data-list-selector='#language-fields-list'>Dodaj język programowania</button>
+    </div>
+    <div class="row">
+        <button class="btn btn-info">{{ button_label|default('Save') }}</button>
+    </div>
+ 
+    
+{{ form_end(form) }}
+
+<script> 
+    jQuery(document).ready(function () {
+        jQuery('.add-another-collection-widget').click(function (e){
+            var list = jQuery(jQuery(this).attr('data-list-selector'));
+            var counter = list.data('widget-counter') || list.children().length;
+            var newWidget = list.attr('data-prototype');
+            newWidget = newWidget.replace(/__name__/g, counter);
+            counter++;
+            list.data('widget-counter', counter);
+            var newElement = jQuery(list.attr('data-widget-tags')).html(newWidget);
+            addTagFormDeleteLink(newElement);
+            newElement.appendTo(list);
+        });
+    });
+    const addTagFormDeleteLink = (item) => {
+
+        const removeFormButton = document.createElement('button');
+        removeFormButton.innerText = 'Usuń';
+        removeFormButton.className = 'btn btn-danger';
+        item.append(removeFormButton);
+        removeFormButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            item.remove();
+        });
+    }
+    document
+        .querySelectorAll('#language-fields-list li')
+        .forEach((tag) => {
+            addTagFormDeleteLink(tag);
+        });
+   
+</script
